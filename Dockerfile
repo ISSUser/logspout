@@ -1,4 +1,5 @@
-FROM alpine:3.12
+FROM isscpx/alpine-fips:3.21.1
+
 ENTRYPOINT ["/bin/logspout"]
 VOLUME /mnt/routes
 EXPOSE 80
@@ -6,6 +7,6 @@ EXPOSE 80
 COPY . /src
 RUN cd /src && ./build.sh "$(cat VERSION)"
 
-ONBUILD COPY ./build.sh /src/build.sh
-ONBUILD COPY ./modules.go /src/modules.go
-ONBUILD RUN cd /src && chmod +x ./build.sh && sleep 1 && sync && ./build.sh "$(cat VERSION)-custom"
+COPY ./build.sh /src/build.sh
+COPY ./modules.go /src/modules.go
+RUN cd /src && chmod +x ./build.sh && sleep 1 && sync && ./build.sh "$(cat VERSION)-custom"
